@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
   // Further reading:
   // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -48,13 +48,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                   String                 @id @default(cuid())
+  name                 String?
+  email                String?                @unique
+  emailVerified        DateTime?
+  image                String?
+  accounts             Account[]
+  sessions             Session[]
+  Campaign             Campaign[]
+  AccountabilityReport AccountabilityReport[]
+  CampaignComment      CampaignComment[]
+  CampaignPayment      CampaignPayment[]
 }
 
 model VerificationToken {
@@ -63,4 +67,62 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum CampaignStatus {
+  ON_GOING
+  CANCELLED
+  DONE
+}
+
+model Campaign {
+  id                   String                 @id @default(cuid())
+  name                 String
+  target_amount        Int
+  total_accumulated    Int
+  images               String[]
+  description          String
+  end_date             DateTime
+  slug                 String
+  is_owned_empathattic Boolean                @default(false)
+  status               CampaignStatus         @default(ON_GOING)
+  user                 User                   @relation(fields: [user_id], references: [id])
+  category             Category               @relation(fields: [category_id], references: [id])
+  created_at           DateTime               @default(now())
+  user_id              String
+  category_id          String
+  AccountabilityReport AccountabilityReport[]
+}
+
+model Category {
+  id       String     @id @default(cuid())
+  name     String
+  Campaign Campaign[]
+}
+
+model AccountabilityReport {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  images      String[]
+  campaign    Campaign @relation(fields: [campaign_id], references: [id])
+  campaign_id String
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String
+}
+
+model CampaignComment {
+  id      String @id @default(cuid())
+  content String
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+}
+
+model CampaignPayment {
+  id             String   @id @default(cuid())
+  amount         Int
+  payment_method String
+  user           User     @relation(fields: [user_id], references: [id])
+  user_id        String
+  created_at     DateTime @default(now())
 }
