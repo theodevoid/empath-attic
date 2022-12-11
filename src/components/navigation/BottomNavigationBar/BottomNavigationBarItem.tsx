@@ -1,8 +1,8 @@
-import { Sx } from "@mantine/core";
-import { Flex, Text, Box } from "@mantine/core";
+import type { Sx } from "@mantine/core";
+import { Flex, Text } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type BottomNavigationBarItemProps = {
   icon: ReactNode;
@@ -32,7 +32,7 @@ const BottomNavigationBarItem = ({
           direction="column"
           align="center"
           sx={theme => {
-            let styles: Sx = {
+            const styles: Sx = {
               ":hover": {
                 cursor: "pointer",
               },

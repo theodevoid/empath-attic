@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import BottomNavigationBar from "components/navigation/BottomNavigationBar";
 import { Container } from "@mantine/core";
 import { Flex } from "@mantine/core";

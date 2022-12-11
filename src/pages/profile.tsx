@@ -1,5 +1,5 @@
 import { Box, Title } from "@mantine/core";
-import { NextPage } from "next";
+import type { NextPage } from "next";
 
 const Profile: NextPage = () => {
   return (
