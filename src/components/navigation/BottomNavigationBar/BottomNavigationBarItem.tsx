@@ -24,11 +24,14 @@ const BottomNavigationBarItem = ({
         justifyContent: "center",
       }}
     >
-      <Link href={href} style={{ textDecoration: "none", color: "inherit" }}>
+      <Link
+        href={href}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
         <Flex
           direction="column"
           align="center"
-          sx={(theme) => {
+          sx={theme => {
             let styles: Sx = {
               ":hover": {
                 cursor: "pointer",

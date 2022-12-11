@@ -4,7 +4,10 @@ import BottomNavigationBarItem from "./BottomNavigationBarItem";
 
 const BottomNavigationBar = () => {
   return (
-    <Flex py={8} sx={{ borderTop: "1px solid lightgray" }}>
+    <Flex
+      py={8}
+      sx={{ borderTop: "1px solid lightgray" }}
+    >
       <BottomNavigationBarItem
         href="/"
         icon={<MdHomeFilled size={28} />}

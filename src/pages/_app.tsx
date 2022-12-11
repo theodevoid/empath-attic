@@ -35,7 +35,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             ],
           },
           primaryColor: "primary",
-          primaryShade: 5
+          primaryShade: 5,
         }}
       >
         <Layout>
