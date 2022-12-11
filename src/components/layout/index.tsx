@@ -10,16 +10,21 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <Container size="xs">
-      <Flex
-        direction="column"
-        h="100vh"
-        justify="center"
+    <Box bg="gray.0">
+      <Container
+        size="xs"
+        bg="white"
       >
-        <Box sx={{ flex: 1 }}>{children}</Box>
-        <BottomNavigationBar />
-      </Flex>
-    </Container>
+        <Flex
+          direction="column"
+          h="100vh"
+          justify="center"
+        >
+          <Box sx={{ flex: 1 }}>{children}</Box>
+          <BottomNavigationBar />
+        </Flex>
+      </Container>
+    </Box>
   );
 };
 
