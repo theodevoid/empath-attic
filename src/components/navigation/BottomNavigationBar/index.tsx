@@ -6,7 +6,7 @@ const BottomNavigationBar = () => {
   return (
     <Flex
       py={8}
-      sx={{ borderTop: "1px solid lightgray" }}
+      sx={{ borderTop: "1px solid lightgray", backgroundColor: "white" }}
     >
       <BottomNavigationBarItem
         href="/"

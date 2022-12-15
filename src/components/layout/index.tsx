@@ -17,11 +17,20 @@ const Layout = ({ children }: LayoutProps) => {
       >
         <Flex
           direction="column"
-          h="100vh"
+          mih="100vh"
           justify="center"
+          pos="relative"
         >
           <Box sx={{ flex: 1 }}>{children}</Box>
-          <BottomNavigationBar />
+          <Box
+            sx={{
+              position: "sticky",
+              bottom: 0,
+              zIndex: 2,
+            }}
+          >
+            <BottomNavigationBar />
+          </Box>
         </Flex>
       </Container>
     </Box>
