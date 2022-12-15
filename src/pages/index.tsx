@@ -20,6 +20,7 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
+      <Title>Home Page 1</Title>
       <Title>Home Page</Title>
       <Title>Home Page</Title>
       <Title>Home Page</Title>
@@ -53,8 +54,7 @@ const Home: NextPage = () => {
       <Title>Home Page</Title>
       <Title>Home Page</Title>
       <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
+      <Title>Home Page L</Title>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import BottomNavigationBar from "components/navigation/BottomNavigationBar";
 import { Container, ScrollArea, Flex, Box } from "@mantine/core";
+import TopNavigationBar from "components/navigation/TopNavigationBar";
 
 type LayoutProps = {
   children: ReactNode;
@@ -8,7 +9,20 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <ScrollArea style={{ height: "100vh" }}>
+    <ScrollArea
+      h="100vh"
+      pos="relative"
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <TopNavigationBar />
+      </Box>
       <Box
         bg="gray.0"
         sx={{ width: "100vw" }}
@@ -16,25 +30,20 @@ const Layout = ({ children }: LayoutProps) => {
         <Container
           size="xs"
           bg="white"
+          py="65px"
         >
-          <Flex
-            direction="column"
-            mih="100vh"
-            justify="center"
-            pos="relative"
-          >
-            <Box sx={{ flex: 1 }}>{children}</Box>
-            <Box
-              sx={{
-                position: "sticky",
-                bottom: 0,
-                zIndex: 2,
-              }}
-            >
-              <BottomNavigationBar />
-            </Box>
-          </Flex>
+          {children}
         </Container>
+      </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <BottomNavigationBar />
       </Box>
     </ScrollArea>
   );
