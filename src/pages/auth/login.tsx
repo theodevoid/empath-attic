@@ -28,7 +28,7 @@ const Login: NextPage<LoginProps> = ({ providers }) => {
         <Button
           color="dark"
           variant="outline"
-          onClick={() => signIn(providers.google.id)}
+          onClick={() => signIn("google")}
         >
           Sign In with Google
         </Button>
@@ -39,7 +39,7 @@ const Login: NextPage<LoginProps> = ({ providers }) => {
 
 export async function getServerSideProps(context: any) {
   const providers = await getProviders();
-  console.log("CONTEXT", context);
+  console.log("CONTEXT", providers);
 
   return {
     props: {
