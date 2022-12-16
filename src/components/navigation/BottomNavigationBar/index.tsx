@@ -6,12 +6,13 @@ const BottomNavigationBar = () => {
   return (
     <Container
       size="xs"
-      h="65px"
+      sx={{
+        borderTop: "1px solid lightgray",
+        height: "65px",
+        backgroundColor: "white",
+      }}
     >
-      <Flex
-        py={8}
-        sx={{ borderTop: "1px solid lightgray", backgroundColor: "white" }}
-      >
+      <Flex py={8}>
         <BottomNavigationBarItem
           href="/"
           icon={<MdHomeFilled size={28} />}
