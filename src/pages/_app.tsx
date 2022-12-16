@@ -9,6 +9,7 @@ import { trpc } from "../utils/trpc";
 import Layout from "../components/layout";
 
 import { MantineProvider } from "@mantine/core";
+import Head from "next/head";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,6 +17,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
+      <Head>
+        <title>Page title</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+      </Head>
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
