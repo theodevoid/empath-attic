@@ -26,7 +26,8 @@ jobs:
           script: |
             PATH=$PATH:/${{ secrets.SSH_USERNAME }}/.nvm/versions/node/v18.12.1/bin
             cd /root/staging
-            git pull origin main
+            git checkout staging
+            git pull origin staging
             npm install
             npx prisma migrate deploy
             npm run build
