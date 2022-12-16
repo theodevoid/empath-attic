@@ -13,12 +13,34 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-      - name: Use NodeJS
-        uses: actions/setup-node@v3.5.1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          node-version: 12.x
-      - name: Deploy Staging
-        uses: appleboy/ssh-action@v0.1.6
+          node-version: ${{ matrix.node-version }}
+      - name: 📬 Caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Build Project
+        run: |
+            npm install
+            npm run build
+      - name: Deploy to Linode
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "./.next, ./package*.json"
+          target: "/root/staging"
+      - name: Run App
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -28,7 +50,6 @@ jobs:
             cd /root/staging
             git pull origin main
             npm install
-            npm run build
             pm2 start 0
     
   
