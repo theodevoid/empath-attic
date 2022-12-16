@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import BottomNavigationBar from "components/navigation/BottomNavigationBar";
-import { Container, ScrollArea, Flex, Box } from "@mantine/core";
+import { Container, ScrollArea, Box } from "@mantine/core";
 import TopNavigationBar from "components/navigation/TopNavigationBar";
 
 type LayoutProps = {
@@ -9,10 +9,7 @@ type LayoutProps = {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <ScrollArea
-      h="100vh"
-      pos="relative"
-    >
+    <ScrollArea style={{ height: "100vh", position: "relative" }}>
       <Box
         sx={{
           position: "absolute",
