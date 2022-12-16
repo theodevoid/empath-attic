@@ -14,6 +14,17 @@ jobs:
     steps:
       - name: Deploy Staging
         uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /root/staging
+            git pull origin main
+            npm install
+            npm run build
+            pm2 start 0
     
   
         
