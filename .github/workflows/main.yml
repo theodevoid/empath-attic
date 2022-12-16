@@ -28,8 +28,7 @@ jobs:
             cd /root/staging
             git pull origin main
             npm install
-            prisma generate
-            prisma migrate deploy
+            npx prisma migrate deploy
             npm run build
             pm2 start 0
     
