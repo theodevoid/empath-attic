@@ -61,10 +61,16 @@ const Campaign = ({
     <Card
       withBorder
       radius="md"
+      pos="unset"
     >
       <Card.Section withBorder>
         <Link href={`/campaign/${slug}`}>
           <Image
+            styles={{
+              imageWrapper: {
+                position: "unset",
+              },
+            }}
             height={160}
             src={imageUrl}
             alt="Donation"
