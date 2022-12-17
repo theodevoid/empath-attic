@@ -20,16 +20,17 @@ type CampaignProps = {
   targetAmount?: number;
   endDate: Moment;
   title: string;
+  slug: string;
 };
 
 const Campaign = ({
   accuAmount,
   endDate,
-  id,
   imageUrl,
   shortDescription,
   targetAmount,
   title,
+  slug,
 }: CampaignProps) => {
   console.log(endDate);
 
@@ -39,7 +40,7 @@ const Campaign = ({
       radius="md"
     >
       <Card.Section>
-        <Link href={`/campaign/${id}`}>
+        <Link href={`/campaign/${slug}`}>
           <Image
             height={160}
             src={imageUrl}
@@ -62,7 +63,7 @@ const Campaign = ({
         {shortDescription}
       </Text>
       <Link
-        href={`/campaign/${id}`}
+        href={`/campaign/${slug}`}
         passHref
       >
         <Text
