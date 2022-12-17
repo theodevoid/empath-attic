@@ -1,4 +1,5 @@
-import { Title } from "@mantine/core";
+import { Box, Title } from "@mantine/core";
+import Campaign from "components/campaign/Campaign";
 import { type NextPage } from "next";
 import Head from "next/head";
 
@@ -8,7 +9,7 @@ const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
 
   return (
-    <>
+    <Box py="md">
       <Head>
         <title>EmpathAttic</title>
         <meta
@@ -20,42 +21,8 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
-      <Title>Home Page 1</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page</Title>
-      <Title>Home Page L</Title>
-    </>
+      <Campaign />
+    </Box>
   );
 };
 
