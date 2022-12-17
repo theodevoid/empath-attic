@@ -7,7 +7,25 @@ import moment from "moment";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
-  const hello = trpc.example.hello.useQuery({ text: "from tRPC" });
+  const { data: campaigns } = trpc.campaign.getAll.useQuery();
+
+  const renderCampaigns = () => {
+    return campaigns?.map(campaign => {
+      return (
+        <Campaign
+          key={campaign.id.toString()}
+          endDate={moment(campaign.end_date)}
+          accuAmount={campaign.total_accumulated}
+          targetAmount={campaign.target_amount}
+          title={campaign.name}
+          id={campaign.id}
+          shortDescription={campaign.short_description}
+          imageUrl={campaign.images[0] as string}
+          slug={campaign.slug}
+        />
+      );
+    });
+  };
 
   return (
     <Box py="md">
@@ -22,8 +40,10 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
+      {renderCampaigns()}
       <Campaign
-        endDate={moment("2022-12-22")}
+        slug={"testing-slug"}
+        endDate={moment("2022-12-")}
         accuAmount={500_000}
         targetAmount={1_000_000}
         title="Bantu para penerus bangsa melanjutkan pendidikan"
