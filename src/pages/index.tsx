@@ -1,4 +1,4 @@
-import { Alert, Box } from "@mantine/core";
+import { Alert, Box, Title } from "@mantine/core";
 import Campaign from "components/campaign/Campaign";
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -57,6 +57,7 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
+      <Title order={3}>Penggalangan dana berlangsung</Title>
       {renderCampaigns()}
     </Box>
   );
