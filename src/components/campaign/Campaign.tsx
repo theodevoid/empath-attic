@@ -34,7 +34,28 @@ const Campaign = ({
   slug,
   category,
 }: CampaignProps) => {
-  console.log(endDate);
+  const renderDanaTerkumpul = () => {
+    if (targetAmount) {
+      return (
+        <Text
+          size="lg"
+          weight={700}
+        >
+          Rp. {accuAmount.toLocaleString()} / Rp.{" "}
+          {targetAmount?.toLocaleString()}
+        </Text>
+      );
+    }
+
+    return (
+      <Text
+        size="lg"
+        weight={700}
+      >
+        Rp. {accuAmount.toLocaleString()}
+      </Text>
+    );
+  };
 
   return (
     <Card
@@ -84,19 +105,13 @@ const Campaign = ({
       <Box mt="md">
         <Text size="sm">Dana terkumpul</Text>
         <Group position="apart">
-          <Text
-            size="lg"
-            weight={700}
-          >
-            Rp. {accuAmount.toLocaleString()} / Rp.{" "}
-            {targetAmount?.toLocaleString()}
-          </Text>
+          {renderDanaTerkumpul()}
           <Badge>Sisa {getDaysLeftFromDate(moment(), endDate)} hari</Badge>
         </Group>
       </Box>
       <Progress
         mt="sm"
-        value={50}
+        value={targetAmount ? (accuAmount / targetAmount) * 100 : 100}
       />
       <Button
         fullWidth
