@@ -21,6 +21,7 @@ type CampaignProps = {
   endDate: Moment;
   title: string;
   slug: string;
+  category: string;
 };
 
 const Campaign = ({
@@ -31,6 +32,7 @@ const Campaign = ({
   targetAmount,
   title,
   slug,
+  category,
 }: CampaignProps) => {
   console.log(endDate);
 
@@ -39,7 +41,7 @@ const Campaign = ({
       withBorder
       radius="md"
     >
-      <Card.Section>
+      <Card.Section withBorder>
         <Link href={`/campaign/${slug}`}>
           <Image
             height={160}
@@ -48,9 +50,15 @@ const Campaign = ({
           />
         </Link>
       </Card.Section>
-      <Text
+      <Badge
         mt="md"
+        color="green"
+      >
+        {category}
+      </Badge>
+      <Text
         size="lg"
+        mt={8}
         weight={700}
       >
         {title}
