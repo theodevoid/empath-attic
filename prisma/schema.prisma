@@ -81,6 +81,7 @@ model Campaign {
   total_accumulated    Int
   images               String[]
   description          String
+  short_description    String
   end_date             DateTime
   slug                 String
   is_owned_empathattic Boolean                @default(false)
