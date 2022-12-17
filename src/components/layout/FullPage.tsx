@@ -6,7 +6,7 @@ type FullPageProps = {
 };
 
 const FullPage = ({ children, sx }: FullPageProps) => {
-  return <Box sx={{ height: "calc(100vh - 65px)", ...sx }}>{children}</Box>;
+  return <Box sx={{ height: "calc(100vh - 130px)", ...sx }}>{children}</Box>;
 };
 
 export default FullPage;

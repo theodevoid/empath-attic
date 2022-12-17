@@ -21,7 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
         <Container
           size="xs"
           bg="white"
-          sx={{ minHeight: "calc(100vh - 65px)" }}
+          sx={{ minHeight: "calc(100vh - 130px)" }}
         >
           {children}
         </Container>
