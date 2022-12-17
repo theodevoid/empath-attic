@@ -3,25 +3,46 @@ import {
   Box,
   Button,
   Card,
-  Flex,
   Group,
   Image,
   Progress,
   Text,
 } from "@mantine/core";
+import moment, { type Moment } from "moment";
 import Link from "next/link";
+import { getDaysLeftFromDate } from "utils/date";
 
-const Campaign = () => {
+type CampaignProps = {
+  imageUrl: string;
+  id: string | number;
+  shortDescription: string;
+  accuAmount: number;
+  targetAmount?: number;
+  endDate: Moment;
+  title: string;
+};
+
+const Campaign = ({
+  accuAmount,
+  endDate,
+  id,
+  imageUrl,
+  shortDescription,
+  targetAmount,
+  title,
+}: CampaignProps) => {
+  console.log(endDate);
+
   return (
     <Card
       withBorder
       radius="md"
     >
       <Card.Section>
-        <Link href="/campaign/id">
+        <Link href={`/campaign/${id}`}>
           <Image
             height={160}
-            src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+            src={imageUrl}
             alt="Donation"
           />
         </Link>
@@ -31,19 +52,17 @@ const Campaign = () => {
         size="lg"
         weight={700}
       >
-        Bantu para penerus bangsa melanjutkan pendidikan
+        {title}
       </Text>
       <Text
         size="sm"
         mt={4}
         color="dimmed"
       >
-        This is a short description. Lorem ipsum, dolor sit amet consectetur
-        adipisicing elit. At, est nostrum sit harum nobis inventore explicabo
-        reprehenderit rerum amet incidunt!
+        {shortDescription}
       </Text>
       <Link
-        href="/campaign/id"
+        href={`/campaign/${id}`}
         passHref
       >
         <Text
@@ -60,10 +79,10 @@ const Campaign = () => {
             size="lg"
             weight={700}
           >
-            Rp. {(500_000).toLocaleString()} / Rp.{" "}
-            {(1_000_000).toLocaleString()}
+            Rp. {accuAmount.toLocaleString()} / Rp.{" "}
+            {targetAmount?.toLocaleString()}
           </Text>
-          <Badge>Sisa 5 hari</Badge>
+          <Badge>Sisa {getDaysLeftFromDate(moment(), endDate)} hari</Badge>
         </Group>
       </Box>
       <Progress

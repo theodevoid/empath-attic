@@ -1,7 +1,8 @@
-import { Box, Title } from "@mantine/core";
+import { Box } from "@mantine/core";
 import Campaign from "components/campaign/Campaign";
 import { type NextPage } from "next";
 import Head from "next/head";
+import moment from "moment";
 
 import { trpc } from "../utils/trpc";
 
@@ -21,7 +22,15 @@ const Home: NextPage = () => {
           href="/favicon.ico"
         />
       </Head>
-      <Campaign />
+      <Campaign
+        endDate={moment("2022-12-22")}
+        accuAmount={500_000}
+        targetAmount={1_000_000}
+        title="Bantu para penerus bangsa melanjutkan pendidikan"
+        id={1}
+        shortDescription="This is a short description. Lorem ipsum, dolor sit amet consectetur adipisicing elit. At, est nostrum sit harum nobis inventore explicabo reprehenderit rerum amet incidunt!"
+        imageUrl="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+      />
     </Box>
   );
 };
