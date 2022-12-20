@@ -10,6 +10,8 @@ type LayoutProps = {
   withBottomBar?: boolean;
   topBar?: ReactNode;
   bottomBar?: ReactNode;
+  topBarHeight?: string;
+  bottomBarHeight?: string;
 };
 
 const Layout = ({
@@ -18,6 +20,8 @@ const Layout = ({
   topBar,
   withBottomBar = true,
   withTopBar = true,
+  topBarHeight = BAR_HEIGHT,
+  bottomBarHeight = BAR_HEIGHT,
 }: LayoutProps) => {
   const renderTopBar = () => {
     if (withTopBar) {
@@ -46,8 +50,8 @@ const Layout = ({
       </Box>
       <Box
         bg="gray.0"
-        pt={withTopBar ? BAR_HEIGHT : 0}
-        pb={withBottomBar ? BAR_HEIGHT : 0}
+        pt={withTopBar ? topBarHeight : 0}
+        pb={withBottomBar ? bottomBarHeight : 0}
         sx={{ minHeight: "100vh" }}
       >
         <Container
