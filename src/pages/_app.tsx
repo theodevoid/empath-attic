@@ -46,9 +46,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           primaryShade: 5,
         }}
       >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <Component {...pageProps} />
       </MantineProvider>
     </SessionProvider>
   );

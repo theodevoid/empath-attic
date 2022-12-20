@@ -1,4 +1,5 @@
 import { Flex, Container } from "@mantine/core";
+import { BAR_HEIGHT } from "constants/styles";
 import { MdHomeFilled, MdReceipt, MdPerson } from "react-icons/md";
 import BottomNavigationBarItem from "./BottomNavigationBarItem";
 
@@ -8,7 +9,7 @@ const BottomNavigationBar = () => {
       size="xs"
       sx={{
         borderTop: "1px solid lightgray",
-        height: "65px",
+        height: BAR_HEIGHT,
         backgroundColor: "white",
       }}
     >
