@@ -45,7 +45,10 @@ const Home: NextPage = () => {
   };
 
   return (
-    <Box py="md">
+    <Box
+      py="md"
+      px="sm"
+    >
       <Head>
         <title>EmpathAttic</title>
         <meta
