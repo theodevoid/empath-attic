@@ -22,7 +22,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { MdChevronLeft } from "react-icons/md";
 import * as yup from "yup";
+import { prisma } from "server/db/client";
+import type { Campaign, Category, User } from "@prisma/client";
 
+// TODO: Refactor bottom bar
+// TODO: Make modal reusable
 const CampaignDetailsBottomBar = ({ campaignId }: { campaignId: string }) => {
   const [opened, handlers] = useDisclosure(false);
 
@@ -125,9 +129,26 @@ const CampaignDetailsBottomBar = ({ campaignId }: { campaignId: string }) => {
   );
 };
 
-const CampaignDetails = () => {
+type CampaignDetailsProps = {
+  campaignData: Campaign & {
+    category: Category;
+    user: User;
+  };
+};
+
+const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
   const router = useRouter();
   const { slug } = router.query;
+
+  const {
+    id,
+    category,
+    name,
+    short_description,
+    total_accumulated,
+    target_amount,
+    user,
+  } = campaignData;
 
   return (
     <Layout
@@ -159,7 +180,7 @@ const CampaignDetails = () => {
           </Text>
         </Flex>
       }
-      bottomBar={<CampaignDetailsBottomBar />}
+      bottomBar={<CampaignDetailsBottomBar campaignId={id} />}
     >
       <Image
         styles={{
@@ -176,20 +197,18 @@ const CampaignDetails = () => {
         px="sm"
         mt="sm"
       >
-        <Badge color="green">Education</Badge>
+        <Badge color="green">{category.name}</Badge>
         <Text
           size={22}
           weight="bold"
         >
-          Bantu para penerus bangsa melanjutkan pendidikan
+          {name}
         </Text>
-        <Text mt={4}>
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
-          et ma
-        </Text>
+        <Text mt={4}>{short_description}</Text>
         <Progress
-          value={10}
+          value={
+            target_amount ? (total_accumulated / target_amount) * 100 : 100
+          }
           radius={0}
           mt="lg"
         />
@@ -200,7 +219,7 @@ const CampaignDetails = () => {
             size="xl"
             color="primary"
           >
-            Rp. {(1000000).toLocaleString("id-ID")}
+            Rp. {total_accumulated.toLocaleString("id-ID")}
           </Text>
           <Text size="sm">
             Terkumpul dari{" "}
@@ -208,7 +227,7 @@ const CampaignDetails = () => {
               display="inline"
               weight={600}
             >
-              Rp. {(10_000_000).toLocaleString("id-ID")}
+              Rp. {target_amount.toLocaleString("id-ID")}
             </Text>
           </Text>
 
@@ -237,8 +256,9 @@ const CampaignDetails = () => {
           <Avatar
             size="lg"
             sx={{ borderRadius: "50%" }}
+            src={user.image}
           >
-            VF
+            {user.name?.charAt(0)}
           </Avatar>
           <Flex
             direction="column"
@@ -255,7 +275,7 @@ const CampaignDetails = () => {
               size="lg"
               weight={500}
             >
-              Void Function
+              {user.name}
             </Text>
           </Flex>
         </Flex>
@@ -264,9 +284,21 @@ const CampaignDetails = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async context => {
+  const findCampaignBySlug = await prisma.campaign.findUnique({
+    where: {
+      slug: context?.params?.slug as string,
+    },
+    include: {
+      category: true,
+      user: true,
+    },
+  });
+
   return {
-    props: {},
+    props: {
+      campaignData: findCampaignBySlug,
+    },
   };
 };
 
