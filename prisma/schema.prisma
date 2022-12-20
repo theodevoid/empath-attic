@@ -83,7 +83,7 @@ model Campaign {
   description          String
   short_description    String                 @db.VarChar(140)
   end_date             DateTime
-  slug                 String
+  slug                 String                 @unique
   is_owned_empathattic Boolean                @default(false)
   status               CampaignStatus         @default(ON_GOING)
   user                 User                   @relation(fields: [user_id], references: [id])
