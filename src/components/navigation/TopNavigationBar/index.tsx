@@ -1,4 +1,5 @@
 import { Flex, Title, Input, Box, Container } from "@mantine/core";
+import { BAR_HEIGHT } from "constants/styles";
 import { MdSearch } from "react-icons/md";
 
 const TopNavigationBar = () => {
@@ -6,7 +7,7 @@ const TopNavigationBar = () => {
     <Box
       py="md"
       bg="primary"
-      h="65px"
+      h={BAR_HEIGHT}
     >
       <Container size="xs">
         <Flex align="center">

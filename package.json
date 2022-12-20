@@ -27,13 +27,16 @@
     "@trpc/server": "^10.0.0",
     "dayjs": "^1.11.7",
     "embla-carousel-react": "^7.0.5",
+    "formik": "^2.2.9",
     "moment": "^2.29.4",
     "next": "13.0.2",
     "next-auth": "4.17.0",
+    "next-superjson-plugin": "^0.5.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "superjson": "1.9.1",
+    "yup": "^0.32.11",
     "zod": "^3.18.0"
   },
   "devDependencies": {

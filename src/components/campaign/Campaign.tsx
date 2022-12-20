@@ -41,8 +41,8 @@ const Campaign = ({
           size="lg"
           weight={700}
         >
-          Rp. {accuAmount.toLocaleString()} / Rp.{" "}
-          {targetAmount?.toLocaleString()}
+          Rp. {accuAmount.toLocaleString("id-ID")} / Rp.{" "}
+          {targetAmount?.toLocaleString("id-ID")}
         </Text>
       );
     }
@@ -52,7 +52,7 @@ const Campaign = ({
         size="lg"
         weight={700}
       >
-        Rp. {accuAmount.toLocaleString()}
+        Rp. {accuAmount.toLocaleString("id-ID")}
       </Text>
     );
   };

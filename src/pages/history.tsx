@@ -1,11 +1,12 @@
-import { Box, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
+import Layout from "components/layout";
 import type { NextPage } from "next";
 
 const History: NextPage = () => {
   return (
-    <Box>
+    <Layout>
       <Title>History Page</Title>
-    </Box>
+    </Layout>
   );
 };
 
