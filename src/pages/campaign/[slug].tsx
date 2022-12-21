@@ -17,7 +17,6 @@ import { prisma } from "server/db/client";
 import type { Campaign, Category, User } from "@prisma/client";
 import CampaignDetailsBottomBar from "components/campaign/CampaignDetailsBottomBar";
 
-// TODO: Make modal reusable
 type CampaignDetailsProps = {
   campaignData: Campaign & {
     category: Category;
