@@ -58,6 +58,7 @@ model User {
   Campaign             Campaign[]
   AccountabilityReport AccountabilityReport[]
   CampaignDonation     CampaignDonation[]
+  CampaignOutgoings    CampaignOutgoings[]
 }
 
 model VerificationToken {
@@ -75,24 +76,27 @@ enum CampaignStatus {
 }
 
 model Campaign {
-  id                   String                 @id @default(cuid())
-  name                 String
-  target_amount        Int
-  total_accumulated    Int
-  images               String[]
-  description          String
-  short_description    String                 @db.VarChar(140)
-  end_date             DateTime
-  slug                 String                 @unique
-  is_owned_empathattic Boolean                @default(false)
-  status               CampaignStatus         @default(ON_GOING)
-  user                 User                   @relation(fields: [user_id], references: [id])
-  category             Category               @relation(fields: [category_id], references: [id])
-  created_at           DateTime               @default(now())
-  user_id              String
-  category_id          String
-  AccountabilityReport AccountabilityReport[]
-  CampaignDonation     CampaignDonation[]
+  id                    String                  @id @default(cuid())
+  name                  String
+  target_amount         Int
+  total_accumulated     Int
+  funds_available       Int
+  images                String[]
+  description           String
+  short_description     String                  @db.VarChar(140)
+  end_date              DateTime
+  slug                  String                  @unique
+  is_owned_empathattic  Boolean                 @default(false)
+  status                CampaignStatus          @default(ON_GOING)
+  user                  User                    @relation(fields: [user_id], references: [id])
+  category              Category                @relation(fields: [category_id], references: [id])
+  created_at            DateTime                @default(now())
+  user_id               String
+  category_id           String
+  AccountabilityReport  AccountabilityReport[]
+  CampaignDonation      CampaignDonation[]
+  CampaignFundsMutation CampaignFundsMutation[]
+  CampaignOutgoings     CampaignOutgoings[]
 }
 
 model Category {
@@ -130,4 +134,30 @@ model CampaignDonation {
   campaign                 Campaign               @relation(fields: [campaign_id], references: [id])
   campaign_id              String
   payment_gateway_order_id String?
+}
+
+model CampaignOutgoings {
+  id          String   @id @default(cuid())
+  amount      Int
+  image       String
+  campaign    Campaign @relation(fields: [campaign_id], references: [id])
+  campaign_id String
+  user        User     @relation(fields: [user_id], references: [id])
+  user_id     String
+  title       String
+  description String
+}
+
+enum CampaignFundsMutationType {
+  CREDIT
+  DEBIT
+}
+
+model CampaignFundsMutation {
+  id               String                    @id @default(cuid())
+  campaign         Campaign                  @relation(fields: [campaign_id], references: [id])
+  amount           Int
+  type             CampaignFundsMutationType
+  transaction_date DateTime                  @default(now())
+  campaign_id      String
 }
