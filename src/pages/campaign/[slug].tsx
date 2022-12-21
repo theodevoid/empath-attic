@@ -64,6 +64,7 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
                 position: "relative",
                 height: "100%",
               }}
+              px={40}
             >
               <Link
                 href="/"
@@ -75,10 +76,11 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
                 />
               </Link>
               <Text
+                align="center"
                 color="white"
                 weight={500}
               >
-                {campaignData.name}
+                Tentang Penggalangan Dana
               </Text>
             </Container>
           </Box>
