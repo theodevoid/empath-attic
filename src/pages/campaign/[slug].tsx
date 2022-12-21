@@ -154,31 +154,37 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
     <Layout
       topBarHeight="48px"
       topBar={
-        <Flex
+        <Box
           h="48px"
           bg="primary"
-          sx={{
-            alignItems: "center",
-            position: "relative",
-            justifyContent: "center",
-          }}
         >
-          <Link
-            href="/"
-            style={{ height: "40px", position: "fixed", left: 0 }}
+          <Container
+            size="xs"
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "relative",
+              height: "100%",
+            }}
           >
-            <MdChevronLeft
-              size="40px"
+            <Link
+              href="/"
+              style={{ height: "40px", position: "absolute", left: 0 }}
+            >
+              <MdChevronLeft
+                size="40px"
+                color="white"
+              />
+            </Link>
+            <Text
               color="white"
-            />
-          </Link>
-          <Text
-            color="white"
-            weight={500}
-          >
-            Tentang Penggalangan Dana
-          </Text>
-        </Flex>
+              weight={500}
+            >
+              Tentang Penggalangan Dana
+            </Text>
+          </Container>
+        </Box>
       }
       bottomBar={<CampaignDetailsBottomBar campaignId={id} />}
     >
