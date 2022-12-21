@@ -80,7 +80,7 @@ model Campaign {
   name                  String
   target_amount         Int
   total_accumulated     Int
-  funds_available       Int
+  funds_available       Int                     @default(0)
   images                String[]
   description           String
   short_description     String                  @db.VarChar(140)
