@@ -126,7 +126,7 @@ enum CampaignDonationStatus {
 model CampaignDonation {
   id                         String                 @id @default(cuid())
   amount                     Int
-  payment_method             String
+  payment_method             String?
   status                     CampaignDonationStatus @default(PENDING)
   user                       User                   @relation(fields: [user_id], references: [id])
   user_id                    String
