@@ -124,17 +124,17 @@ enum CampaignDonationStatus {
 }
 
 model CampaignDonation {
-  id                       String                 @id @default(cuid())
-  amount                   Int
-  payment_method           String
-  status                   CampaignDonationStatus @default(PENDING)
-  user                     User                   @relation(fields: [user_id], references: [id])
-  user_id                  String
-  created_at               DateTime               @default(now())
-  paid_at                  DateTime?
-  campaign                 Campaign               @relation(fields: [campaign_id], references: [id])
-  campaign_id              String
-  payment_gateway_order_id String?
+  id                         String                 @id @default(cuid())
+  amount                     Int
+  payment_method             String
+  status                     CampaignDonationStatus @default(PENDING)
+  user                       User                   @relation(fields: [user_id], references: [id])
+  user_id                    String
+  created_at                 DateTime               @default(now())
+  paid_at                    DateTime?
+  campaign                   Campaign               @relation(fields: [campaign_id], references: [id])
+  campaign_id                String
+  payment_gateway_invoice_id String?
 }
 
 model CampaignOutgoings {
