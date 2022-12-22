@@ -120,13 +120,14 @@ enum CampaignDonationStatus {
   UNPAID
   PAID
   CANCELLED
+  PENDING
 }
 
 model CampaignDonation {
   id                       String                 @id @default(cuid())
   amount                   Int
   payment_method           String
-  status                   CampaignDonationStatus
+  status                   CampaignDonationStatus @default(PENDING)
   user                     User                   @relation(fields: [user_id], references: [id])
   user_id                  String
   created_at               DateTime               @default(now())
