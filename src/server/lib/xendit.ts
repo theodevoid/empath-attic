@@ -20,6 +20,7 @@ export const createXenditInvoice = async (
     return {
       amount,
       invoiceUrl: res.invoice_url,
+      invoiceId: res.id,
     };
   } catch (error) {
     console.log(error);
