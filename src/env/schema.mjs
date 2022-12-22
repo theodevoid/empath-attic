@@ -23,6 +23,8 @@ export const serverSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  XENDIT_SERVER_KEY: z.string(),
+  XENDIT_CALLBACK_VERIF_TOKEN: z.string(),
 });
 
 /**
