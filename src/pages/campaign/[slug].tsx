@@ -17,6 +17,8 @@ import { prisma } from "server/db/client";
 import type { Campaign, Category, User } from "@prisma/client";
 import CampaignDetailsBottomBar from "components/campaign/CampaignDetailsBottomBar";
 import Head from "next/head";
+import { trpc } from "utils/trpc";
+import { useFocusReturn } from "@mantine/hooks";
 
 type CampaignDetailsProps = {
   campaignData: Campaign & {
@@ -29,6 +31,14 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
   const router = useRouter();
   const { slug } = router.query;
 
+  const { data } = trpc.campaign.getCampaignById.useQuery(
+    { id: campaignData.id },
+    {
+      enabled: false,
+      refetchOnWindowFocus: true,
+    },
+  );
+
   const {
     id,
     category,
@@ -37,6 +47,7 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
     total_accumulated,
     target_amount,
     user,
+    funds_available,
   } = campaignData;
 
   return (
@@ -124,7 +135,10 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
               size="xl"
               color="primary"
             >
-              Rp. {total_accumulated.toLocaleString("id-ID")}
+              Rp.{" "}
+              {data?.funds_available
+                ? data?.funds_available.toLocaleString("id-ID")
+                : funds_available.toLocaleString("id-ID")}
             </Text>
             <Text size="sm">
               Terkumpul dari{" "}

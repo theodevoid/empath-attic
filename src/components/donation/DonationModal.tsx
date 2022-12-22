@@ -12,41 +12,92 @@ import {
   Flex,
 } from "@mantine/core";
 import { useFormik } from "formik";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { MdCheck } from "react-icons/md";
+import { MdCheck, MdInfo } from "react-icons/md";
 import { trpc } from "utils/trpc";
 import * as yup from "yup";
+import { useRouter } from "next/router";
 
-const AfterSubmitState = ({ invoiceUrl }: { invoiceUrl: string }) => {
+type AfterSubmitStateProps = {
+  invoiceUrl: string;
+  campaignDonationId: string;
+};
+
+const AfterSubmitState = ({
+  invoiceUrl,
+  campaignDonationId,
+}: AfterSubmitStateProps) => {
+  const {
+    data: campaignData,
+    isSuccess,
+    isFetching,
+    refetch: refetchDonationStatus,
+    isLoading,
+  } = trpc.campaign.checkDonationPaymentStatus.useQuery(
+    {
+      campaignDonationId,
+    },
+    {
+      refetchOnWindowFocus: true,
+    },
+  );
+
+  // refetches campaign donation status
+  const refetchData = () => {
+    refetchDonationStatus();
+  };
+
   return (
     <Box>
-      <Alert
-        icon={<MdCheck />}
-        title="Pembayaran berhasil terbuat!"
-        color="green"
-      >
-        Yey! Pembayaran kamu sudah sukses terbuat. Selesaikan pembayaran untuk
-        menyelesaikan proses donasi. Terima kasih atas bantuannya sahabat
-        berempati!
-      </Alert>
-      <Text
-        size="sm"
-        align="center"
-        mt="md"
-      >
-        Klik link di bawah ini jika layar kamu tidak dipindahkan
-      </Text>
-      <Flex justify="center">
-        <Anchor
-          align="center"
-          size="sm"
-          mt={4}
-          href={invoiceUrl}
-          target="_blank"
+      {campaignData?.status == "PAID" ? (
+        <Alert
+          icon={<MdCheck />}
+          title="Pembayaran berhasil!"
+          color="green"
         >
-          {invoiceUrl.slice(0, 50)}
-        </Anchor>
-      </Flex>
+          Pembayaran kamu sudah berhasil! Terima kasih atas bantuannya sahabat
+          berempati!
+        </Alert>
+      ) : (
+        <>
+          <Alert
+            icon={<MdInfo />}
+            title="Invoice berhasil terbuat!"
+            color="blue"
+          >
+            Yey! Invoice kamu sudah sukses terbuat. Selesaikan pembayaran untuk
+            menyelesaikan proses donasi.
+          </Alert>
+          <Text
+            size="sm"
+            align="center"
+            mt="md"
+          >
+            Klik link di bawah ini jika layar kamu tidak dipindahkan
+          </Text>
+          <Flex justify="center">
+            <Anchor
+              align="center"
+              size="sm"
+              mt={4}
+              href={invoiceUrl}
+              target="_blank"
+            >
+              {invoiceUrl.slice(0, 50)}
+            </Anchor>
+          </Flex>
+          <Button
+            mt="xl"
+            fullWidth
+            color="green"
+            onClick={() => refetchData()}
+            disabled={isLoading || isFetching}
+          >
+            {isLoading ? <Loader /> : "Aku sudah melakukan pembayaran"}
+          </Button>
+        </>
+      )}
     </Box>
   );
 };
@@ -62,10 +113,12 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
   const {
     isLoading,
     mutate: handleSubmitDonation,
-    data,
+    data: donationData,
     isSuccess,
     reset,
   } = trpc.campaign.donateToCampaign.useMutation();
+  const { data: userData, status } = useSession();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -77,10 +130,6 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
       const { amount, message } = values;
 
       handleSubmitDonation({ amount, message, campaignId });
-
-      formik.setFieldValue("amount", 0);
-      formik.setFieldValue("message", "");
-      formik.setFieldValue("isAnonymous", false);
     },
     validationSchema: yup.object().shape({
       amount: yup
@@ -131,12 +180,19 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
 
   useEffect(() => {
     if (isSuccess) {
-      window.open(data?.payment_gateway_invoice_url as string);
+      window.open(donationData?.payment_gateway_invoice_url as string);
     }
-  }, [isSuccess, data?.payment_gateway_invoice_url]);
+  }, [isSuccess, donationData?.payment_gateway_invoice_url]);
+
+  useEffect(() => {
+    if (status == "unauthenticated" && opened) {
+      router.push("/auth/login");
+    }
+  }, [status, opened]);
 
   return (
     <Modal
+      closeOnClickOutside={false}
       opened={opened}
       onClose={onClose}
       title="Berikan bantuan"
@@ -148,7 +204,8 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
     >
       {isSuccess ? (
         <AfterSubmitState
-          invoiceUrl={data?.payment_gateway_invoice_url as string}
+          campaignDonationId={donationData?.id as string}
+          invoiceUrl={donationData?.payment_gateway_invoice_url as string}
         />
       ) : (
         <>
@@ -163,6 +220,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
               placeholder={(10000).toLocaleString("id-ID")}
               onChange={handleNominalInput}
               value={formik.values.amount.toLocaleString("id-ID")}
+              disabled={isLoading}
             />
           </Input.Wrapper>
           <Input.Wrapper
@@ -173,6 +231,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
               size="md"
               minRows={3}
               onChange={handleMessageInput}
+              disabled={isLoading}
             />
           </Input.Wrapper>
           <Checkbox
@@ -187,7 +246,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
             onClick={() => formik.handleSubmit()}
             disabled={isLoading}
           >
-            {isLoading ? <Loader /> : "Lanjutkan pembayaran"}
+            {isLoading ? <Loader size="sm" /> : "Lanjutkan pembayaran"}
           </Button>
         </>
       )}

@@ -26,3 +26,20 @@ export const createXenditInvoice = async (
     console.log(error);
   }
 };
+
+export const getXenditInvoice = async (invoiceId: string) => {
+  try {
+    const getInvoice: any = await i.getInvoice({
+      invoiceID: invoiceId,
+    });
+
+    return {
+      id: getInvoice.id,
+      invoiceUrl: getInvoice.invoice_url,
+      status: getInvoice.status,
+      paidAt: getInvoice.paid_at,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,4 +1,5 @@
-import { createXenditInvoice } from "server/lib/xendit";
+import { CampaignDonationStatus } from "@prisma/client";
+import { createXenditInvoice, getXenditInvoice } from "server/lib/xendit";
 import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../trpc";
 
@@ -65,5 +66,101 @@ export const campaignRouter = router({
       });
 
       return donationTransaction;
+    }),
+  checkDonationPaymentStatus: protectedProcedure
+    .input(
+      z.object({
+        campaignDonationId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { prisma } = ctx;
+      const { campaignDonationId } = input;
+
+      const findCampaignDonation = await prisma.campaignDonation.findUnique({
+        where: {
+          id: campaignDonationId,
+        },
+      });
+
+      if (findCampaignDonation?.status == "PAID") {
+        return findCampaignDonation;
+      }
+
+      if (!findCampaignDonation) {
+        throw new Error("Campaign donation does not exist");
+      }
+
+      const findXenditInvoice = await getXenditInvoice(
+        findCampaignDonation.payment_gateway_invoice_id as string,
+      );
+
+      const updateCampaignObj: {
+        status: CampaignDonationStatus;
+        paid_at: Date | null;
+      } = {
+        status: CampaignDonationStatus.PENDING,
+        paid_at: null,
+      };
+
+      switch (findXenditInvoice?.status) {
+        case "EXPIRED":
+          updateCampaignObj.status = CampaignDonationStatus.CANCELLED;
+          break;
+        case "PAID":
+        case "SETTLED":
+          updateCampaignObj.status = CampaignDonationStatus.PAID;
+          updateCampaignObj.paid_at = findXenditInvoice.paidAt;
+          break;
+      }
+
+      // change campaign donation status to PAID
+      const updateCampaignDonation = await prisma.campaignDonation.update({
+        data: {
+          status: updateCampaignObj.status,
+        },
+        where: {
+          id: campaignDonationId,
+        },
+      });
+
+      // add funds to campaign if donation is paid
+      if (updateCampaignDonation.status == "PAID") {
+        await prisma.campaign.update({
+          data: {
+            funds_available: {
+              increment: updateCampaignDonation.amount,
+            },
+            total_accumulated: {
+              increment: updateCampaignDonation.amount,
+            },
+          },
+          where: {
+            id: updateCampaignDonation.campaign_id,
+          },
+        });
+      }
+
+      return updateCampaignDonation;
+    }),
+  getCampaignById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+
+      const findCampaignById = await ctx.prisma.campaign.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          category: true,
+        },
+      });
+
+      return findCampaignById;
     }),
 });
