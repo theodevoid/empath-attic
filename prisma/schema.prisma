@@ -135,6 +135,8 @@ model CampaignDonation {
   campaign                   Campaign               @relation(fields: [campaign_id], references: [id])
   campaign_id                String
   payment_gateway_invoice_id String?
+  is_anon                    Boolean                @default(false)
+  message                    String?
 }
 
 model CampaignOutgoings {
