@@ -1,4 +1,4 @@
-import { type AppType } from "next/app";
+import NextApp, { type AppType, AppProps, AppContext } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -50,6 +50,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
       </MantineProvider>
     </SessionProvider>
   );
+};
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+
+  return {
+    ...appProps,
+    session: null,
+  };
 };
 
 export default trpc.withTRPC(MyApp);
