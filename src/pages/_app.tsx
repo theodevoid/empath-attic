@@ -1,4 +1,5 @@
-import NextApp, { type AppType, AppProps, AppContext } from "next/app";
+import type { AppContext, AppType } from "next/app";
+import NextApp from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
@@ -6,7 +7,6 @@ import { trpc } from "../utils/trpc";
 
 // disabled tailwind, caused issues with mantine
 import "../styles/globals.css";
-import Layout from "../components/layout";
 
 import { MantineProvider } from "@mantine/core";
 import Head from "next/head";

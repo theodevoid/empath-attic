@@ -18,7 +18,6 @@ import type { Campaign, Category, User } from "@prisma/client";
 import CampaignDetailsBottomBar from "components/campaign/CampaignDetailsBottomBar";
 import Head from "next/head";
 import { trpc } from "utils/trpc";
-import { useFocusReturn } from "@mantine/hooks";
 
 type CampaignDetailsProps = {
   campaignData: Campaign & {

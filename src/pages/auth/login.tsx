@@ -13,7 +13,7 @@ type LoginProps = {
   >;
 };
 
-const Login: NextPage<LoginProps> = ({ providers }) => {
+const Login: NextPage<LoginProps> = () => {
   const { data } = useSession();
   const router = useRouter();
 
@@ -37,9 +37,8 @@ const Login: NextPage<LoginProps> = ({ providers }) => {
   );
 };
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps() {
   const providers = await getProviders();
-  console.log("CONTEXT", providers);
 
   return {
     props: {

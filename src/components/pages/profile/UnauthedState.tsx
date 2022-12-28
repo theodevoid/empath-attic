@@ -1,4 +1,4 @@
-import { Box, Title, Button, Avatar, Flex, Text } from "@mantine/core";
+import { Box, Title, Button, Flex } from "@mantine/core";
 import FullPage from "components/layout/FullPage";
 import type { NextPage } from "next";
 import Link from "next/link";
