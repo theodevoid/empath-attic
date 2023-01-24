@@ -30,7 +30,6 @@ const AfterSubmitState = ({
 }: AfterSubmitStateProps) => {
   const {
     data: campaignData,
-    isSuccess,
     isFetching,
     refetch: refetchDonationStatus,
     isLoading,
@@ -117,7 +116,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
     isSuccess,
     reset,
   } = trpc.campaign.donateToCampaign.useMutation();
-  const { data: userData, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   const formik = useFormik({
@@ -137,7 +136,14 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
         .required()
         .min(10_000, "Minimum pemberian Rp. 10.000")
         .max(100_000_000, "Maximum pemberian Rp. 100.000.000"),
-      message: yup.string().nullable(),
+      message: yup
+        .string()
+        .test(
+          "len",
+          "Maximum panjang pesan 200 karakter",
+          val => (val?.length as number) <= 200,
+        )
+        .nullable(),
       isAnonymouse: yup.boolean(),
     }),
   });
@@ -226,6 +232,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
           <Input.Wrapper
             label="Tulis sebuah pesan"
             mt="md"
+            error={formik.errors.message}
           >
             <Textarea
               size="md"
@@ -233,6 +240,7 @@ const DonationModal = ({ opened, onClose, campaignId }: DonationModalProps) => {
               onChange={handleMessageInput}
               disabled={isLoading}
             />
+            <Text color="dimmed" size="xs">{formik.values.message.length}/200</Text>
           </Input.Wrapper>
           <Checkbox
             label="Berikan bantuan secara anonim"

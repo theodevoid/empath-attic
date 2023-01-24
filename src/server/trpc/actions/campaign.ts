@@ -165,3 +165,44 @@ export const getCampaignById = publicProcedure
 
     return findCampaignById;
   });
+
+export const getCampaignDonations = publicProcedure
+  .input(
+    z.object({
+      campaignId: z.string(),
+      page: z.number().optional().default(1),
+    }),
+  )
+  .query(async ({ ctx, input }) => {
+    const { campaignId, page } = input;
+
+    let hasNext = false;
+    const itemPerPage = 5;
+
+    const getDonationsByCampaignId = await ctx.prisma.campaignDonation.findMany(
+      {
+        where: {
+          campaign_id: campaignId,
+          status: "PAID"
+        },
+        skip: itemPerPage * (page - 1),
+        take: itemPerPage + 1,
+        include: {
+          user: true,
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+      },
+    );
+
+    if (getDonationsByCampaignId.length > itemPerPage) {
+      getDonationsByCampaignId.pop();
+      hasNext = true;
+    }
+
+    return {
+      data: getDonationsByCampaignId,
+      hasNext,
+    };
+  });

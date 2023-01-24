@@ -7,6 +7,7 @@ import {
   Avatar,
   Flex,
   Container,
+  Button,
 } from "@mantine/core";
 import Layout from "components/layout";
 import type { GetServerSideProps } from "next";
@@ -18,6 +19,8 @@ import type { Campaign, Category, User } from "@prisma/client";
 import CampaignDetailsBottomBar from "components/campaign/CampaignDetailsBottomBar";
 import Head from "next/head";
 import { trpc } from "utils/trpc";
+import DonationCard from "components/campaign/DonationCard";
+import { useState, useEffect } from "react";
 
 type CampaignDetailsProps = {
   campaignData: Campaign & {
@@ -27,6 +30,9 @@ type CampaignDetailsProps = {
 };
 
 const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [campaignDonations, setCampaignDonations] = useState<any[]>([]);
+
   const router = useRouter();
   const { slug } = router.query;
 
@@ -38,6 +44,26 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
     },
   );
 
+  const { data: getCampaignDonationsData, isFetching } =
+    trpc.campaign.getCampaignDonations.useQuery(
+      {
+        campaignId: campaignData.id,
+        page: currentPage,
+      },
+      {
+        refetchOnWindowFocus: false,
+      },
+    );
+
+  useEffect(() => {
+    if (getCampaignDonationsData?.data.length) {
+      setCampaignDonations(prevCampaignDonations => [
+        ...prevCampaignDonations,
+        ...getCampaignDonationsData?.data,
+      ]);
+    }
+  }, [getCampaignDonationsData?.data]);
+
   const {
     id,
     category,
@@ -48,6 +74,24 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
     user,
     funds_available,
   } = campaignData;
+
+  const rendercampaignDonations = () => {
+    return campaignDonations?.map(item => {
+      return (
+        <Box
+          my={8}
+          key={item.id}
+        >
+          <DonationCard
+            amount={item?.amount}
+            imageUrl={item?.user?.image as string}
+            message={item?.message}
+            username={item?.user?.name as string}
+          />
+        </Box>
+      );
+    });
+  };
 
   return (
     <>
@@ -197,6 +241,34 @@ const CampaignDetails = ({ campaignData }: CampaignDetailsProps) => {
               </Text>
             </Flex>
           </Flex>
+        </Box>
+        <Box
+          px="sm"
+          py="lg"
+        >
+          <Text
+            size="xl"
+            weight={700}
+            mb={12}
+          >
+            Bantuan-bantuan orang baik
+          </Text>
+          {rendercampaignDonations()}
+          {getCampaignDonationsData?.hasNext ? (
+            <Flex
+              justify="center"
+              mt={16}
+            >
+              <Button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                variant="subtle"
+                color="dark"
+                disabled={isFetching}
+              >
+                See more
+              </Button>
+            </Flex>
+          ) : null}
         </Box>
       </Layout>
     </>
